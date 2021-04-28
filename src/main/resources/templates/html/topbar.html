@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>导航</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="keywords" content=""/>
+    <!--layui-->
+    <link th:href="@{/admin/assets/layui/css/layui.css}" rel="stylesheet" type="text/css" media="all"/>
+</head>
+<body>
+    <div class="layui-header" th:fragment="topbar">
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a th:href="${#httpServletRequest.getContextPath() + '/index'}">主页</a></li>
+            <li class="layui-nav-item"><a th:href="${#httpServletRequest.getContextPath() +'/toAbout'}">流浪猫狗知识</a></li>
+            <li class="layui-nav-item"><a th:href="${#httpServletRequest.getContextPath() +'/toAdopt'}">领养中心</a></li>
+            <li class="layui-nav-item"><a th:href="${#httpServletRequest.getContextPath() +'/toActivities'}">活动分享</a></li>
+            <li class="layui-nav-item"><a th:href="${#httpServletRequest.getContextPath() +'/toFamous'}">团队展示</a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <!--<img src="http://t.cn/RCzsdCq" class="layui-nav-img">-->
+                    <img src="/images/bg.jpg" class="layui-nav-img">
+                    <span th:text="${session.user.realname}"></span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:void(0);" id="info">个人信息</a></dd>
+                    <dd><a href="javascript:void(0);" id="Pwd">修改密码</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a th:href="${#httpServletRequest.getContextPath() +'../../user/logout'}">退出</a></li>
+        </ul>
+    </div>
+    <!-- js 非得用2.0版本得jQuery-->
+    <script th:src="@{/js/jquery-2.2.3.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <!-- Necessary-JavaScript-File-For-Bootstrap -->
+    <!--layui-->
+    <script th:src="@{/admin/assets/layui/layui.all.js}"></script>
+    <script th:src="@{/admin/assets/layui/layui.js}"></script>
+    <script th:src="@{/admin/assets/layui/lay/modules/layer.js}"></script>
+    <!-- //js -->
+    <script type="text/javascript">
+        //个人信息弹窗
+        layui.use(['layer','form'], function(){
+            var layer = layui.layer;
+            var form = layui.form;
+            var $ = layui.$;
+            var id = $("#id").val();
+            var realname = $("#realname").val();
+            var sex = $("#sex").val();
+            var age = $("#age").val();
+            var telephone = $("#telephone").val();
+            var state = $("#state").val();
+            var email = $("#email").val();
+            var address = $("#address").val();
+            $('#info').on('click', function(){
+                //页面层
+                layer.open({
+                    type: 1 //Page层类型
+                    ,area: ["550px", "600px"]
+                    ,skin: 'layui-layer-molv'
+                    , closeBtn: 1 // 是否显示关闭按钮
+                    , anim: 0 //动画类型
+                    , icon: 1 // icon
+                    ,moveType : 0 //拖拽模式，0或者1
+                    ,title: ['个人信息','font-size:18px']
+                    // ,btn: ['提交', '取消']
+                    ,btnAlign: 'c'   // 按钮居中
+                    ,shade : 0.4 // 遮罩层透明度
+                    ,content:$('#window'),
+                    // success: function(layero, index){
+                    // 	form.render();//动态渲染
+                    // 	form.verify();
+                    // 	form.on('submit(formDemo)', function(data){
+                    // 		$.ajax({
+                    // 			url:"user/findPersonInfo",
+                    // 			// dataType:"json",   //返回格式为json
+                    // 			async:true,
+                    // 			data:{id:id,realname:realname,sex:sex,age:age,telephone:telephone,
+                    // 				state:state,email:email,address:address},    //参数值
+                    // 			type:"post",   //请求方式
+                    // 			success:function(req){
+                    // 				//请求成功时处理
+                    // 				console.log(req);
+                    // 				if(req == "success"){
+                    // 					layer.msg('修改成功', {icon: 6});
+                    // 					// layer.close(index);   // 关闭弹窗
+                    // 					setTimeout(ChangeTime, 10000);
+                    // 					function ChangeTime() {
+                    // 						location.href = "/index";
+                    // 					}
+                    // 				}else{
+                    // 					layer.msg('修改失败 '+req.msg, {icon: 5});
+                    // 				}
+                    // 			},
+                    // 			error:function(){
+                    // 				//请求出错处理
+                    // 				// console.log("00000")
+                    // 				layer.msg('修改失败', {icon: 5});
+                    // 			}
+                    // 		});
+                    // 	});
+                    // },
+                    // yes: function(index, layero){
+                    //
+                    // 	// layero.find('.layui-btn').click();    // 这一句就是点击确认按钮触发form的隐藏提交
+                    // }
+                });
+            });
+
+            // 密码====================================
+            $('#Pwd').on('click', function(){
+                //页面层
+                layer.open({
+                    type: 1 //Page层类型
+                    ,area: ["450px", "350px"]
+                    ,skin: 'layui-layer-molv'
+                    , closeBtn: 1 // 是否显示关闭按钮
+                    , anim: 0 //动画类型
+                    , icon: 1 // icon
+                    ,moveType : 0 //拖拽模式，0或者1
+                    ,title: ['修改密码','font-size:18px']
+                    ,btnAlign: 'c'   // 按钮居中
+                    ,shade : 0.4 // 遮罩层透明度
+                    ,content:$('#modifyPwd'),
+
+                });
+            });
+
+
+            // 确认两次密码是否一致
+            form.verify({
+                pwd: function () {
+                    var psw1 = $("#pwd1").val();
+                    var psw2 = $("#pwd2").val();
+                    var message = '';
+                    if(psw1!=psw2){
+                        message="两次密码不一致";
+                    }
+                    //需要注意 需要将返回信息写在ajax方法外
+                    if (message !== '')
+                        return message;
+                }
+
+            });
+        });
+    </script>
+</body>
+</html>

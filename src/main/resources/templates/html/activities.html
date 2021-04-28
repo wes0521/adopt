@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>活动展示</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="keywords" content=""/>
+    <!-- css files -->
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" type="text/css" media="all">
+    <!-- Owl-Carousel-CSS -->
+    <link th:href="@{/css/simplelightbox.min.css}" rel="stylesheet" type="text/css">
+    <!-- Bootstrap-Core-CSS -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}" type="text/css" media="all">
+    <!-- Font-Awesome-Icons-CSS -->
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}" type="text/css" media="all" />
+    <!-- Owl-Carousel-CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all" />
+    <!--layui-->
+    <link th:href="@{/admin/assets/layui/css/layui.css}" rel="stylesheet" type="text/css" media="all"/>
+
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <!--导航栏-->
+        <!--引入抽取的topbar-->
+        <div th:replace="html/topbar :: topbar"></div>
+        <!--个人资料-->
+        <form id="window" class="layui-form" th:action="@{/user/findPersonInfo}" th:object="${session.user}" style="margin: 5%;display: none;" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" th:value="*{username}" required  readonly lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="realname" th:value="*{realname}" required lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" th:checked="*{sex=='1'}?true:false" value="1" title="男">
+                    <input type="radio" name="sex" th:checked="*{sex=='0'}?true:false" value="0" title="女">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-block">
+                    <input type="text" name="age" th:value="*{age}" required lay-verify="required" placeholder="23" autocomplete="off" class="layui-input">
+                </div>
+                <!--<div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话号码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="telephone" th:value="*{telephone}" required lay-verify="required" placeholder="15997855562" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">领养动物</label>
+                <div class="layui-input-block">
+                    <span th:text="${session.pname}">无</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" th:value="*{email}" required lay-verify="required" placeholder="123@qq.com" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" th:value="*{address}" required lay-verify="required" placeholder="河南郑州" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+            <input type="hidden" name="id" th:value="*{id}">
+            <input type="hidden" name="navId" th:value="activities">
+            <div class="layui-form-item">
+                <p style="color: red">[[${error}]]</p>
+            </div>
+        </form>
+        <!--修改密码-->
+        <form id="modifyPwd" class="layui-form" th:action="@{/user/modifyPwd}" th:object="${session.user}" style="margin: 5%;display: none;" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" th:value="*{username}" required  readonly lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-block">
+                    <input type="text" id="pwd1" name="password" required lay-verify="required|pass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-block">
+                    <input type="text" id="pwd2" name="password1" required lay-verify="required|pwd" placeholder="请确认新密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+            <input type="hidden" name="id" th:value="*{id}">
+            <input type="hidden" name="navId" th:value="activities">
+            <div class="layui-form-item">
+                <p style="color: red">[[${error}]]</p>
+            </div>
+        </form>
+        <!--顶部-导航栏-->
+
+        <div class="services" id="services">
+            <div class="container">
+                <h3 class="agile-title" style="color: #0e90d2;">活动的日常分享</h3>
+                <div class="w3_agile_services_grids"  >
+                    <div class="col-md-4 col-sm-4 col-xs-4 w3_agile_services_grid " data-aos="zoom-in" th:each="a:${activities}">
+                        <fieldset>
+                            <legend th:text="${a.title}"><a onclick="im(this);" th:value="${a.id}"  href="javascript:void(0);">阿迪</a></legend>
+                            <div style="height: 200px;">
+                                <span>活动时间：</span><span th:text="${#dates.format(a.times, 'yyyy-MM-dd')}"></span><br><br>
+                                <B>活动地址：</B><span th:text="${a.address}"></span><br>
+                                <B>活动内容：</B><span th:text="${a.event}"></span><br>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--分页按钮-->
+        <div id="but-t" align="center"></div>
+
+    </div>
+    <!-- js 非得用2.0版本得jQuery-->
+    <script th:src="@{/js/jquery-2.2.3.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/admin/assets/layui/layui.all.js}"></script>
+    <script th:src="@{/admin/assets/layui/layui.js}"></script>
+    <script th:src="@{/admin/assets/layui/lay/modules/layer.js}"></script>
+    <!-- //js -->
+    <script th:inline="javascript">
+        <!--分页-->
+            layui.use('laypage', function(){
+                var laypage = layui.laypage;
+                var ctxPath = [[${#httpServletRequest.getContextPath()}]];
+                //执行一个laypage实例
+                laypage.render({
+                    elem: 'but-t' //注意，这里的 test1 是 ID，不用加 # 号
+                    ,count: [[${pageModel.recordCount}]] //数据总数，从服务端得到
+                    ,limit: [[${pageModel.pageSize}]]
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    ,curr: [[${pageModel.pageIndex}]]
+                    ,jump: function(obj, first){
+                        //obj包含了当前分页的所有参数，比如：
+                        console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                        console.log(obj.limit); //得到每页显示的条数
+                        //首次不执行
+                        if(!first){
+                            //改变切换页面的时候，再次查找数据
+                            window.location.href= ctxPath+"/activity/findAllList?pageSize="+obj.limit+"&pageIndex="+obj.curr;
+                        }
+                    }
+                });
+            });
+    </script>
+    <script type="text/javascript">
+        //个人信息弹窗
+        layui.use(['layer','form'], function(){
+            var layer = layui.layer;
+            var form = layui.form;
+            var $ = layui.$;
+            $('#info').on('click', function(){
+                //页面层
+                layer.open({
+                    type: 1 //Page层类型
+                    ,area: ["550px", "600px"]
+                    ,skin: 'layui-layer-molv'
+                    , closeBtn: 1 // 是否显示关闭按钮
+                    , anim: 0 //动画类型
+                    , icon: 1 // icon
+                    ,moveType : 0 //拖拽模式，0或者1
+                    ,title: ['个人信息','font-size:18px']
+                    // ,btn: ['提交', '取消']
+                    ,btnAlign: 'c'   // 按钮居中
+                    ,shade : 0.4 // 遮罩层透明度
+                    ,content:$('#window'),
+
+                });
+            });
+
+            // 密码====================================
+            //密码校验
+            form.verify({
+                pass: function (value) {
+                    if (!new RegExp("^[\\S]{6,12}$").test(value)) {
+                        return '密码必须6到12位，且不能出现空格';
+                    }
+                }
+            });
+
+            $('#Pwd').on('click', function(){
+                //页面层
+                layer.open({
+                    type: 1 //Page层类型
+                    ,area: ["450px", "350px"]
+                    ,skin: 'layui-layer-molv'
+                    , closeBtn: 1 // 是否显示关闭按钮
+                    , anim: 0 //动画类型
+                    , icon: 1 // icon
+                    ,moveType : 0 //拖拽模式，0或者1
+                    ,title: ['修改密码','font-size:18px']
+                    ,btnAlign: 'c'   // 按钮居中
+                    ,shade : 0.4 // 遮罩层透明度
+                    ,content:$('#modifyPwd'),
+
+                });
+            });
+
+
+            // 确认两次密码是否一致
+            form.verify({
+                pwd: function () {
+                    var psw1 = $("#pwd1").val();
+                    var psw2 = $("#pwd2").val();
+                    var message = '';
+                    if(psw1!=psw2){
+                        message="两次密码不一致";
+                    }
+                    //需要注意 需要将返回信息写在ajax方法外
+                    if (message !== '')
+                        return message;
+                }
+
+            });
+        });
+    </script>
+
+</body>
+</html>

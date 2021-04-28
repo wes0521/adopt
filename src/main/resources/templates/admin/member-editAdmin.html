@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>修改个人信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <!--<link rel="stylesheet" th:href="@{/Xadmin/css/font.css}" href="/Xadmin/css/font.css">-->
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="/layui/css/layui.css">
+    <link rel="stylesheet" th:href="@{/Xadmin/css/xadmin.css}" href="/Xadmin/css/xadmin.css">
+    <script type="text/javascript" th:src="@{/layui/layui.js}" src="/layui/layui.js"></script>
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form method="post" class="layui-form" autocomplete="off" th:object="${adminById}">
+            <input type="hidden" name="id" id="id" th:value="*{id}">
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">
+                    <span class="x-red">*</span>用户名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_adminName" name="adminName" th:value="*{adminName}" readonly required=""
+                           autocomplete="off" class="layui-input"></div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>将会成为您唯一的登入名
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">
+                    <span class="x-red">*</span>姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_username" name="realName" th:value="*{realName}" placeholder="请输入姓名"
+                           required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="sex" th:checked="*{sex==1}?true:false" value="1" title="男">
+                    <input type="radio" name="sex" th:checked="*{sex==0}?true:false" value="0" title="女">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">电话</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_telephone" name="telephone" th:value="*{telephone}" placeholder="请输入电话号码"
+                           lay-verify="phone" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_email" name="email" th:value="*{email}" placeholder="请输入邮箱"
+                           lay-verify="email" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">生日</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_birthday" name="birthday"
+                           th:value="${#dates.format(adminById.birthday, 'yyyy-MM-dd')}" placeholder="请选择生日"
+                           lay-verify="" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">个人描述</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="200字以内" th:text="*{remark}" lay-verify="remark" class="layui-textarea"
+                              name="remark" id="remark"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <!--<label for="L_repass" class="layui-form-label"></label>-->
+                <label for="L_username" class="layui-form-label"></label>
+                <button class="layui-btn" lay-submit lay-filter="modify" type="submit">修改</button>
+                <button type="reset" class="layui-btn">重置</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'layer', 'jquery', 'laydate'], function () {
+
+        var form = layui.form,
+            $ = layui.jquery,
+            layer = layui.layer;
+
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#L_birthday' //指定元素
+            , theme: 'grid'
+            , trigger: 'click'
+        });
+
+        //自定义验证规则
+        form.verify({
+            nikename: [
+                /^[\u4e00-\u9fa5]{2,4}$/
+                , '姓名为为2到4个汉字'
+            ],
+            remark: function (value) {
+                //console.log(value+"value====")
+                if (value.length > 200 || value.length < 1) {
+                    return '限制最多200个文字';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(modify)', function (data) {
+            console.log("信息------" + data.field);
+            /*function check1() {
+                var radio = document.getElementsByName("sex");
+                for (i = 0; i < radio.length; i++) {
+                    if (radio[i].checked) {
+                        return radio[i].value;
+                    }
+                }
+            }
+    */
+
+            $.ajax({
+                url: "/adopt/admin/modifyAdminById",
+                type: "post",
+                data: data.field,
+                success: function (data1) {
+                    //请求成功时处理
+                    console.log(data1 + "===---===");
+                    if (data1 == "success") {
+                        layer.alert("修改成功", {
+                                icon: 6
+                            },
+                            function () {
+                                // 获得frame索引
+                                var index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                            });
+                    } else {
+                        layer.msg('修改失败- ' + data1.msg, {icon: 5});
+                    }
+                },
+                error: function () {
+                    //请求出错处理
+                    layer.msg('修改失败+', {icon: 5});
+                }
+            });
+            return false;
+        });
+
+
+    })
+    ;
+</script>
+<script>var _hmt = _hmt || [];
+(function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script>
+</body>
+
+</html>

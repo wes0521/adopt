@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>救助后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" th:href="@{/Xadmin/css/font.css}" href="/Xadmin/css/font.css">
+    <link rel="stylesheet" th:href="@{/Xadmin/css/xadmin.css}" href="/Xadmin/css/xadmin.css">
+    <!-- <link rel="stylesheet" href="./css/theme5.css"> -->
+    <script src="/Xadmin/lib/layui/layui.js" th:src="@{/Xadmin/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/Xadmin/js/xadmin.js}" src="/Xadmin/js/xadmin.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+
+        //修改用户密码
+        function modifyPwdById(e) {
+            var pid = e.getAttribute("value");
+            console.log(pid);
+            var ididid = $("#idid").val();
+            xadmin.open('编辑信息', '/adopt/admin/findPwdById?id=' + pid, 600, 580);
+        }
+
+        //修改用户信息
+        function byId(e) {
+            // console.log(e.getAttribute("value"));
+            var ss = e.getAttribute("value");
+            console.log(ss);
+            var ididid = $("#idid").val();
+            xadmin.open('编辑信息', '/adopt/admin/findInfoById?id=' + ss, 600, 580);
+        }
+    </script>
+
+</head>
+
+<body>
+<div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a>
+              <cite>导航元素</cite></a>
+          </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5" th:action="@{/adopt/admin/adminFindAdminList}"
+                          method="post">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input type="text" name="adminName" placeholder="请输入用户名" th:value="${adminName}"
+                                   autocomplete="off" class="layui-input">
+                            <!--<input type="text" name="adminName" placeholder="请输入用户名" th:value="${adminName}" autocomplete="off" class="layui-input">-->
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
+                                    class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </form>
+                </div>
+                <!--<script type="text/html" id="toolbarDemo">-->
+                <div class="layui-card-header">
+                    <button class="layui-btn layui-btn-danger" onclick="delAll1()"><i
+                            class="layui-icon"></i>批量删除
+                    </button>
+                    <button class="layui-btn" onclick="xadmin.open('添加管理员','/admin/member-addAdmin.html',600,400)"><i
+                            class="layui-icon"></i>添加
+                    </button>
+                </div>
+                <!--</script>-->
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <table class="layui-table layui-form" id="article">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" lay-filter="checkall" name="" lay-skin="primary">
+                            </th>
+                            <th style="width: 10px;">人员编号</th>
+                            <th>用户名</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>电话</th>
+                            <th>邮箱</th>
+                            <th>生日</th>
+                            <th style="width: 200px;">描述</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="admin,adminStat:${admins}">
+                            <td>
+                                <input type="checkbox" th:value="${admin.id}" name="idd" lay-skin="primary">
+                            </td>
+                            <td th:text="${adminStat.count}" style="width: 10px;">1</td>
+                            <td th:text="${admin.adminName}">小明</td>
+                            <td th:text="${admin.realName}">明天</td>
+                            <td th:text="${admin.sex== 1 ? '男':'女'}">男</td>
+                            <td th:text="${admin.telephone}">15998856523</td>
+                            <td th:text="${admin.email}">123@qq.com</td>
+                            <td th:text="${#dates.format(admin.birthday, 'yyyy-MM-dd')}">2020-02-16</td>
+                            <td th:text="${admin.remark}">北京市 海淀区</td>
+                            <input type="hidden" th:value="${admin.id}" id="idid">
+                            <td class="td-manage">
+                                <a title="编辑" onclick="byId(this);" th:value="${admin.id}" href="javascript:void(0);">
+                                    <i class="layui-icon">&#xe642;</i>
+                                </a>
+                                <!--<a onclick="xadmin.open('修改密码','/admin/member-password.html',600,400)" title="修改密码" href="javascript:;">-->
+                                <!--<i class="layui-icon">&#xe631;</i>-->
+                                <!--</a>-->
+                                <a onclick="modifyPwdById(this);" th:value="${admin.id}" title="修改密码"
+                                   href="javascript:;">
+                                    <i class="layui-icon">&#xe631;</i>
+                                </a>
+                                <a title="删除" onclick="member_del(this)" th:value="${admin.id}" href="javascript:;">
+                                    <i class="layui-icon">&#xe640;</i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--分页按钮-->
+                <div id="but-t" align="center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--分页-->
+<script th:inline="javascript">
+    layui.use('laypage', function () {
+        var laypage = layui.laypage;
+        var ctxPath = [[${#httpServletRequest.getContextPath()}]];
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'but-t' //注意，这里的 test1 是 ID，不用加 # 号
+            , count: [[${pageModel.recordCount}]] //数据总数，从服务端得到
+            , limit: [[${pageModel.pageSize}]]
+            , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+            , curr: [[${pageModel.pageIndex}]]
+            , adminName: [[${adminName}]]
+            , jump: function (obj, first) {
+                //obj包含了当前分页的所有参数，比如：
+                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                console.log(obj.limit); //得到每页显示的条数
+                //首次不执行
+                if (!first) {
+                    //改变切换页面的时候，再次查找数据
+                    window.location.href = ctxPath + "/adopt/admin/adminFindAdminList?pageSize=" + obj.limit + "&pageIndex=" + obj.curr + "&adminName=" + obj.adminName;
+                }
+            }
+        });
+    });
+</script>
+<script>
+    layui.use(['laydate', 'form', 'layer', 'jquery', 'table'], function () {
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var table = layui.table;
+        // $ = layui.jquery;
+        $ = layui.$;
+
+        // 监听全选
+        form.on('checkbox(checkall)', function (data) {
+
+            if (data.elem.checked) {
+                $("input[name='idd']").prop('checked', true);
+            } else {
+                $("input[name='idd']").prop('checked', false);
+            }
+            form.render('checkbox');
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+
+    });
+
+    /*用户-删除*/
+    function member_del(obj) {
+        layer.confirm('确认要删除吗？', function (index) {
+            //发异步删除数据
+
+            var idd = obj.getAttribute("value");
+            console.log(idd + "+++++++++============-");
+            $.ajax({
+                url: "/adopt/admin/delAdminById",
+                type: "post",   //请求方式
+                async: true,
+                data: {
+                    id: idd
+                },
+                success: function (data1) {
+                    if (data1 == "success") {
+                        layer.msg('已删除!', {icon: 1, time: 1000});
+                    } else {
+                        layer.msg('删除失败 ' + {icon: 5});
+                    }
+                }
+            });
+            $(obj).parents("tr").remove();
+        });
+    }
+
+
+    /*
+    * 批量删除
+    * */
+    function delAll1(argument) {
+        var ids = [];
+        //获取选中的id
+        $('tbody input').each(function (index, el) {
+            if ($(this).prop('checked')) {
+                console.log($(this).val() + '--');
+                ids.push($(this).val())
+            }
+        });
+
+        if(ids.length == 0){
+            layer.msg('请选择要删除的数据', {icon: 5});
+            return false;
+        }
+
+        layer.confirm('确认要删除吗？', function (index) {
+            //捉到所有被选中的，发异步进行删除
+            $.ajax({
+                url: "/adopt/admin/delManyAdminById",
+                type: "post",   //请求方式
+                data: {
+                    ids: ids.toString()
+                },
+                success: function (data1) {
+                    //请求成功时处理
+                    if (data1 == "success") {
+                        layer.alert("删除成功", {
+                            icon: 6
+                        });
+                        $(".layui-form-checked").not('.header').parents('tr').remove();
+                    } else {
+                        layer.msg('删除失败- ' + data1.msg, {icon: 5});
+                    }
+                }
+            });
+        });
+    }
+
+</script>
+
+
+<script type="text/javascript">
+    //个人信息弹窗
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer;
+        var form = layui.form;
+        var $ = layui.$;
+        var id = $("#id").val();
+        var realname = $("#realname").val();
+        var sex = $("#sex").val();
+        var age = $("#age").val();
+        var telephone = $("#telephone").val();
+        var state = $("#state").val();
+        var email = $("#email").val();
+        var address = $("#address").val();
+        $('#info').on('click', function () {
+            //页面层
+            layer.open({
+                type: 1 //Page层类型
+                , area: ["550px", "600px"]
+                , skin: 'layui-layer-molv'
+                , closeBtn: 1 // 是否显示关闭按钮
+                , anim: 0 //动画类型
+                , icon: 1 // icon
+                , moveType: 0 //拖拽模式，0或者1
+                , title: ['个人信息', 'font-size:18px']
+                // ,btn: ['提交', '取消']
+                , btnAlign: 'c'   // 按钮居中
+                , shade: 0.4 // 遮罩层透明度
+                , content: $('#window'),
+                // success: function(layero, index){
+                // 	form.render();//动态渲染
+                // 	form.verify();
+                // 	form.on('submit(formDemo)', function(data){
+                // 		$.ajax({
+                // 			url:"user/findPersonInfo",
+                // 			// dataType:"json",   //返回格式为json
+                // 			async:true,
+                // 			data:{id:id,realname:realname,sex:sex,age:age,telephone:telephone,
+                // 				state:state,email:email,address:address},    //参数值
+                // 			type:"post",   //请求方式
+                // 			success:function(req){
+                // 				//请求成功时处理
+                // 				console.log(req);
+                // 				if(req == "success"){
+                // 					layer.msg('修改成功', {icon: 6});
+                // 					// layer.close(index);   // 关闭弹窗
+                // 					setTimeout(ChangeTime, 10000);
+                // 					function ChangeTime() {
+                // 						location.href = "/index";
+                // 					}
+                // 				}else{
+                // 					layer.msg('修改失败 '+req.msg, {icon: 5});
+                // 				}
+                // 			},
+                // 			error:function(){
+                // 				//请求出错处理
+                // 				// console.log("00000")
+                // 				layer.msg('修改失败', {icon: 5});
+                // 			}
+                // 		});
+                // 	});
+                // },
+                // yes: function(index, layero){
+                //
+                // 	// layero.find('.layui-btn').click();    // 这一句就是点击确认按钮触发form的隐藏提交
+                // }
+            });
+        });
+
+        // 密码====================================
+        //密码校验
+        form.verify({
+            pass: function (value) {
+                if (!new RegExp("^[\\S]{6,12}$").test(value)) {
+                    return '密码必须6到12位，且不能出现空格';
+                }
+            }
+        });
+        $('#Pwd').on('click', function () {
+            //页面层
+            layer.open({
+                type: 1 //Page层类型
+                , area: ["450px", "350px"]
+                , skin: 'layui-layer-molv'
+                , closeBtn: 1 // 是否显示关闭按钮
+                , anim: 0 //动画类型
+                , icon: 1 // icon
+                , moveType: 0 //拖拽模式，0或者1
+                , title: ['修改密码', 'font-size:18px']
+                , btnAlign: 'c'   // 按钮居中
+                , shade: 0.4 // 遮罩层透明度
+                , content: $('#modifyPwd'),
+
+            });
+        });
+
+
+        // 确认两次密码是否一致
+        form.verify({
+            pwd: function () {
+                var psw1 = $("#pwd1").val();
+                var psw2 = $("#pwd2").val();
+                var message = '';
+                if (psw1 != psw2) {
+                    message = "两次密码不一致";
+                }
+                //需要注意 需要将返回信息写在ajax方法外
+                if (message !== '')
+                    return message;
+            }
+
+        });
+    });
+</script>
+</html>

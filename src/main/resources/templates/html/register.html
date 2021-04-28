@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>流浪猫狗救助站注册</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" th:href="@{/admin/assets/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" th:href="@{/admin/assets/layui/css/login.css}" media="all" />
+    <link rel="stylesheet" th:href="@{/css/my.css}" media="all"/>
+	<script th:src="@{/admin/assets/layui/layui.js}" charset="utf-8"></script>
+    <script th:inline="javascript">
+        var ctxPath = [[${#httpServletRequest.getContextPath()}]];
+        function changeCode() {
+            $("#checkCodeImg").attr({"src": ctxPath + "/interceptor/getCode?w=" + Math.random()})
+        }
+    </script>
+</head>
+<body>
+    <!--注册背景-->
+	<div class="video_mask">
+		<img th:src="@{/images/login/login_bg.jpg}">
+	</div>
+	<div class="login">
+	    <h1>注册</h1>
+	    <form class="layui-form">
+	    	<div class="layui-form-item">
+				<input class="layui-input" name="username" id="new_name" placeholder="请输入您的用户名" lay-verify="required|username" type="text" autocomplete="off">
+		    </div>
+		    <div class="layui-form-item">
+				<input class="layui-input" name="password" id="new_psw" placeholder="请输入密码" lay-verify="required|pass" type="password" autocomplete="off">
+		    </div>
+            <div class="layui-form-item">
+                <input class="layui-input" name="password1" id="new_psw1" placeholder="请确认密码" lay-verify="required|password" type="password" autocomplete="off">
+            </div>
+		    <div class="layui-form-item form_code">
+				<input class="layui-input" name="code" placeholder="验证码" lay-verify="required|code" type="text" autocomplete="off" id="login_code">
+                <div class="code">
+                    <img th:src="${#httpServletRequest.getContextPath() + '/interceptor/getCode'}" onclick="changeCode()"
+                         id="checkCodeImg"/>
+                    <!--<a href="javascript:changeCode()" style="text-underline: none">看不清 换一张</a><br>-->
+                </div>
+		    </div>
+			<button class="layui-btn login_btn" lay-submit="" lay-filter="register">注册</button>
+			<div class="layui-form-item form_code" id="log">
+				<a th:href="@{toLogin}" id="toLogin">已有账号？去登录</a>
+			</div>
+		</form>
+	</div>
+
+	<script>
+		layui.use(['layer', 'form', 'jquery'], function () {//调用layui组件
+			var form = layui.form;
+			var layer = layui.layer;
+			$ = layui.jquery;
+
+			//用户名校验
+            form.verify({//表单提交时触发
+                username: function (value) {
+                    if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                        return '用户名不能有特殊字符';
+                    }
+                    if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                        return '用户名首尾不能出现下划线\'_\'';
+                    }
+                    if(/^\d+\d+\d$/.test(value)){
+                        return '用户名不能全为数字';
+                    }
+                }
+            });
+
+            //密码校验
+            form.verify({
+                pass: function (value) {
+                    if (!new RegExp("^[\\S]{6,12}$").test(value)) {
+                        return '密码必须6到12位，且不能出现空格';
+                    }
+                }
+             });
+
+			//密码是否一致校验
+			form.verify({
+				// password: function () {
+				// 	var psw1 = $("#new_psw").val();
+				// 	var psw2 = $("#new_psw1").val();
+				// 	console.log(psw1+"==?"+psw2);
+				// 	var message = '';
+				// 	if(psw1!=psw2){
+				// 		message="两次密码不一致";
+				// 	}
+				// 	//需要注意 需要将返回信息写在ajax方法外
+				// 	if (message !== '')
+				// 		return message;
+				// }
+                password:function(value){
+                    if($('input[name=password]').val() !== value)
+                        return '两次密码输入不一致！';
+                }
+
+
+            });
+
+			//验证码校验
+            form.verify({
+                code: function (value) {
+                    var code = $("#login_code").val();
+                    var message = '';
+                    console.log(code+"=====");
+                    $.ajax({
+                        type: 'POST',
+                        url: '/interceptor/valCode',
+                        async: false, //改为同步请求
+                        data: {code:code},
+                        success: function (data) {
+                            console.log(data);
+                            if (data=="codeError") {
+                                message = "验证码错误";
+                            }
+                        }
+                    });
+                    //需要注意 需要将返回信息写在ajax方法外
+                    if (message != '')
+                        return message;
+                }
+            });
+
+            // 进行注册操作
+			form.on('submit(register)', function () {
+				var username = $("#new_name").val();
+				var password = $("#new_psw").val();
+				$.ajax({
+					url: '/interceptor/register',
+					type: 'post',
+					data:{username:username,password:password},
+					success: function (d) {
+						if (d == "success") {
+							layer.msg("注册成功,请登录...",{icon: 6});
+							setTimeout(ChangeTime, 2000);
+							function ChangeTime() {
+								location.href = "/toLogin";
+							}
+						}else{
+                            layer.msg("请稍后重试",{icon: 5});
+                            $("#login_code").val("");
+                        }
+
+					}
+				})
+
+				return false;
+			})
+		});
+
+	</script>
+</body>
+</html>

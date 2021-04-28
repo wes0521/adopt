@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>后台添加用户</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" th:href="@{/Xadmin/css/font.css}" href="/Xadmin/css/font.css">
+    <link rel="stylesheet" th:href="@{/Xadmin/css/xadmin.css}" href="/Xadmin/css/xadmin.css">
+    <script type="text/javascript" th:src="@{/Xadmin/lib/layui/layui.js}" src="/Xadmin/lib/layui/layui.js"
+            charset="utf-8"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">
+                    <span class="x-red">*</span>姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_username" name="petName" required="" lay-verify="required|pet"
+                           autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">
+                    <span class="x-red">*</span>种类</label>
+                <div class="layui-input-block">
+                    <select id="sel" name="petType" lay-verify="required">
+                        <option value="1" th:selected="*{petType==1}">金毛</option>
+                        <option value="2" th:selected="*{petType==2}">泰迪</option>
+                        <option value="3" th:selected="*{petType==3}">柯基</option>
+                        <option value="4" th:selected="*{petType==4}">藏獒</option>
+                        <option value="5" th:selected="*{petType==5}">边牧</option>
+                        <option value="6" th:selected="*{petType==6}">柴犬</option>
+                        <option value="7" th:selected="*{petType==7}">吉娃娃</option>
+                        <option value="8" th:selected="*{petType==8}">贵宾犬</option>
+                        <option value="9" th:selected="*{petType==9}">哈士奇</option>
+                        <option value="10" th:selected="*{petType==10}">雪纳瑞</option>
+                        <option value="11" th:selected="*{petType==11}">博美犬</option>
+                        <option value="12" th:selected="*{petType==12}">杜宾犬</option>
+                        <option value="13" th:selected="*{petType==13}">萨摩耶</option>
+                        <option value="14" th:selected="*{petType==14}">阿拉斯加</option>
+                        <option value="15" th:selected="*{petType==15}">暹罗猫</option>
+                        <option value="16" th:selected="*{petType==16}">狸花猫</option>
+                        <option value="17" th:selected="*{petType==17}">波斯猫</option>
+                        <option value="18" th:selected="*{petType==18}">缅甸猫</option>
+                        <option value="19" th:selected="*{petType==19}">雪鞋猫</option>
+                        <option value="20" th:selected="*{petType==20}">布偶猫</option>
+                        <option value="21" th:selected="*{petType==21}">孟加拉猫</option>
+                        <option value="22" th:selected="*{petType==22}">金吉拉猫</option>
+                        <option value="23" th:selected="*{petType==23}">安哥拉猫</option>
+                        <option value="24" th:selected="*{petType==24}">美国短毛猫</option>
+                        <option value="25" th:selected="*{petType==25}">英国短毛猫</option>
+                        <option value="26" th:selected="*{petType==26}">挪威森林猫</option>
+                        <option value="27" th:selected="*{petType==27}">土耳其梵猫</option>
+                        <option value="28" th:selected="*{petType==28}">俄罗斯蓝猫</option>
+                        <option value="29" th:selected="*{petType==29}">斯芬克斯猫</option>
+                        <option value="30" th:selected="*{petType==30}">苏格兰折耳猫</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="sex" th:checked="*{sex==1}?true:false" value="1" title="公">
+                    <input type="radio" name="sex" th:checked="*{sex==0}?true:false" value="0" title="母">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">生日</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_birthday" name="birthday" placeholder="请选择生日"
+                           lay-verify="required" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="200字以内" th:text="*{remark}" lay-verify="required|remark" class="layui-textarea"
+                              name="remark" id="remark"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">照片</label>
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" id="headImg">上传图片</button>
+                    <input type="hidden" id="img_url" name="pic" th:value="${pic}"/>
+                    <div class="layui-upload-list">
+                        <img class="layui-upload-img" width="100px" height="80px" id="demo1"/>
+                        <p id="demoText"></p>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="layui-form-item">
+                <label class="layui-form-label">修改头像</label>
+                <div class="layui-input-inline uploadHeadImage">
+                    <div class="layui-upload-drag" id="headImg">
+                        <i class="layui-icon"></i>
+                        <p>点击上传图片，或将图片拖拽到此处</p>
+                    </div>
+                </div>
+                <div class="layui-input-inline">
+                    <div class="layui-upload-list">
+                        <img style="width: 100px;height: 100px;" class="layui-upload-img headImage" src="http://t.cn/RCzsdCq" id="demo1">
+                        <p id="demoText"></p>
+                    </div>
+                </div>
+            </div>-->
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label"></label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+                <button type="reset" class="layui-btn">重置</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:inline="javascript">
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#L_birthday' //指定元素
+            , theme: 'grid'
+            , trigger: 'click'
+        });
+    });
+    layui.use(['form', 'layer', 'jquery'],
+        function () {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+            //用户名校验
+            form.verify({
+                pet: function (value) {
+                    //var username = $("#L_uName").val();
+                    var message = '';
+                    if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                        return message = '用户名不能有特殊字符';
+                    }
+                    if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+                        return message = '用户名首尾不能出现下划线\'_\'';
+                    }
+                    if (/^\d+\d+\d$/.test(value)) {
+                        return message = '用户名不能全为数字';
+                    }
+                    if (message !== '') {
+                        return message;
+                    }
+                }
+            });
+
+            //密码校验
+            form.verify({
+                remark: function (value) {
+                    //console.log(value+"value====")
+                    if (value.length > 200 || value.length < 1) {
+                        return '限制最多200个文字';
+                    }
+                }
+            });
+            //监听提交
+            form.on('submit(add)',
+                function (data) {
+                    $.ajax({
+                        url: '/adopt/pet/addPet',
+                        type:'post',
+                        data: data.field,
+                        success: function (d) {
+                            if (d == "success") {
+                                layer.msg("添加成功", {icon: 6},
+                                    function () {
+                                        // 获得frame索引
+                                        var index = parent.layer.getFrameIndex(window.name);
+                                        //关闭当前frame
+                                        parent.layer.close(index);
+                                    });
+                            } else {
+                                layer.msg("请稍后重试", {icon: 5});
+                            }
+                        }
+                    });
+                    return false;
+                });
+
+        });
+    // 图片上传
+    layui.use(["jquery", "upload", "form", "layer", "element"], function () {
+        var $ = layui.$,
+            element = layui.element,
+            layer = layui.layer,
+            upload = layui.upload,
+            form = layui.form;
+        //上传
+        var uploadInst = upload.render({
+            elem: '#headImg'
+            , url: '/adopt/pet/upload/headImg'
+            , multiple: true
+            , size: 500
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                //alert("上传成功"+res.imgPath);
+                document.getElementById('img_url').value = res.imgPath;
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+        element.init();
+    });
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+
+</html>

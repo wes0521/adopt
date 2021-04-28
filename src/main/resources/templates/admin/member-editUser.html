@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>修改个人信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <!--<link rel="stylesheet" th:href="@{/Xadmin/css/font.css}" href="/Xadmin/css/font.css">-->
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="/layui/css/layui.css">
+    <link rel="stylesheet" th:href="@{/Xadmin/css/xadmin.css}" href="/Xadmin/css/xadmin.css">
+    <!--<script type="text/javascript" th:src="@{/Xadmin/lib/layui/layui.all.js}" src="/Xadmin/lib/layui/layui.all.js"-->
+            <!--charset="utf-8"></script>-->
+    <!--<script type="text/javascript" th:src="@{/Xadmin/js/xadmin.js}" src="/Xadmin/js/xadmin.js"></script>-->
+    <script type="text/javascript" th:src="@{/layui/layui.js}" src="/layui/layui.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" th:action="@{/user/modifyUserById}" th:object="${userById}">
+            <input type="hidden" name="id" id="id" th:value="*{id}">
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">
+                    <span class="x-red">*</span>用户名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_adminName" name="username" th:value="*{username}" readonly required=""
+                           autocomplete="off" class="layui-input"></div>
+                <!--<div class="layui-form-mid layui-word-aux">-->
+                    <!--<span class="x-red">*</span>将会成为您唯一的登入名-->
+                <!--</div>-->
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">
+                    <span class="x-red">*</span>姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_username" name="realname" th:value="*{realname}" placeholder="请输入姓名"
+                           required="" lay-verify="required|nikename" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="sex" th:checked="*{sex=='1'}?true:false" value="1" title="男">
+                    <input type="radio" name="sex" th:checked="*{sex=='0'}?true:false" value="0" title="女">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_age" class="layui-form-label">年龄</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_age" name="age" th:value="*{age}" placeholder="请输入年龄"
+                           lay-verify="required|number|age" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">电话</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_telephone" name="telephone" th:value="*{telephone}" placeholder="请输入电话号码"
+                           lay-verify="required|phone" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_email" name="email" th:value="*{email}" placeholder="请输入邮箱"
+                           lay-verify="required|email" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_address" name="address" th:value="*{address}" placeholder="请填写地址"
+                           lay-verify="required" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">有无领养经历</label>
+                <div class="layui-input-block">
+                    <select id="sel" name="state" lay-verify="required">
+                        <option value="0" th:selected="*{state==0}">无</option>
+                        <option value="1" th:selected="*{state==1}">有</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <!--<label for="L_repass" class="layui-form-label"></label>-->
+                <label for="L_username" class="layui-form-label"></label>
+                <button type="button" class="layui-btn" lay-filter="modify1" lay-submit="">修改</button>
+                <button type="reset" class="layui-btn">重置</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'layer'],
+        function () {
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+            //自定义验证规则
+            form.verify({
+                nikename: function (value) {
+                    if (!new RegExp("^[\u4e00-\u9fa5]{2,4}$").test(value)) {
+                        return '姓名为为2到4个汉字';
+                    }
+                }
+            });
+            form.verify({
+                age: function (value) {
+                    console.log(parseInt($('#L_age').val()) + "parseInt($('#L_age').val())==")
+                    if (parseInt($('#L_age').val()) < 1 || parseInt($('#L_age').val()) > 250) {
+                        return '输入的年龄不符（1~250）';
+                    }
+                }
+            });
+
+            //监听提交
+            form.on('submit(modify1)', function (data) {
+                //获取性别的值
+                function check1(){
+                    var radio = document.getElementsByName("sex");
+                    for(i = 0; i < radio.length; i ++){
+                        if(radio[i].checked){
+                            return radio[i].value;
+                        }
+                    }
+                }
+                //发异步，把数据提交给php
+                // var id = $("#id").val();
+                // var username = $("#L_adminName").val();
+                // var realname = $("#L_username").val();
+                // var sex = document.getElementsByName("sex").innerHTML=check1();
+                // var telephone = $("#L_telephone").val();
+                // var email = $("#L_email").val();
+                // var age = $("#L_age").val();
+                // var address = $("#L_address").val();
+                // var state = $('#sel').val();
+                $.ajax({
+                    url: "/user/modifyUserById",
+                    type:"post",   //请求方式
+                    async:true,
+                    data:data.field,
+                    // data: {
+                    //     id: id, username:username,realname: realname, sex: sex, telephone: telephone,
+                    //     email: email, age:age, address:address, state:state
+                    // },
+                    success: function (data1) {
+                        //请求成功时处理
+                        if (data1 == "success") {
+                            layer.alert("修改成功", {icon: 6},
+                                function () {
+                                    // 获得frame索引
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    //关闭当前frame
+                                    parent.layer.close(index);
+                                });
+                        } else {
+                            layer.msg('修改失败- ' + data1.msg, {icon: 5});
+                        }
+                    },
+                    error: function () {
+                        //请求出错处理
+                        console.log("00000")
+                        layer.msg('修改失败+', {icon: 5});
+                    }
+                });
+                return false;
+            });
+        });
+</script>
+<script>
+    var _hmt = _hmt || [];
+(function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script>
+</body>
+
+</html>

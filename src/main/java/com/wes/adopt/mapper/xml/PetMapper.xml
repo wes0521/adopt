@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wes.adopt.mapper.PetMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wes.adopt.entity.Pet">
+        <id column="id" property="id" />
+        <result column="petName" property="petName" />
+        <result column="petType" property="petType" />
+        <result column="sex" property="sex" />
+        <result column="birthday" property="birthday" />
+        <result column="pic" property="pic" />
+        <result column="state" property="state" />
+        <result column="remark" property="remark" />
+        <result column="is_deletd" property="isDeletd" />
+        <result column="gmt_create" property="gmt_modified" />
+        <result column="gmt_modified" property="gmt_modified" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, petName, petType, sex, birthday, pic, state, remark, is_deletd, createTime, updateTime, version
+    </sql>
+
+</mapper>

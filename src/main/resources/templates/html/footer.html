@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导航</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="keywords" content=""/>
+
+</head>
+<body class="layui-layout-body">
+<section class="footer-w3" th:fragment="footer">
+    <div class="container" style="width: 100%;">
+        <div class="col-lg-4 col-md-4 col-sm-4 footer-agile1" data-aos="zoom-in">
+            <h3>网站简介</h3>
+            <p class="footer-p1">
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;该网站是用于想领养流浪猫狗和想成为我们其中一员，那么你将再这里实现你的想法。
+                如果你是领养者，请认真选取想要领养的流浪猫狗领养后，请认真负责对待可爱的猫狗！
+                如果你是想成为志愿者，请联系我们，我们欢迎任何爱心认识，加入我们！
+            </p>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 footer-mid-w3" data-aos="zoom-in">
+            <h3>流浪猫狗展示</h3>
+            <div class="agileinfo_footer_grid1">
+                <a href="#">
+                    <img th:src="@{/images/stary/cat1.jpg}" alt=" " class="img-responsive">
+                </a>
+            </div>
+            <div class="agileinfo_footer_grid1">
+                <a href="#">
+                    <img th:src="@{/images/stary/cat2.jpg}" alt=" " class="img-responsive">
+                </a>
+            </div>
+            <div class="agileinfo_footer_grid1">
+                <a href="#">
+                    <img th:src="@{/images/stary/cat3.jpg}" alt=" " class="img-responsive">
+                </a>
+            </div>
+            <div class="agileinfo_footer_grid1">
+                <a href="#">
+                    <img th:src="@{/images/stary/dog1.jpg}" alt=" " class="img-responsive">
+                </a>
+            </div>
+            <div class="agileinfo_footer_grid1">
+                <a href="#">
+                    <img th:src="@{/images/stary/dog2.jpg}" alt=" " class="img-responsive">
+                </a>
+            </div>
+            <div class="agileinfo_footer_grid1">
+                <a href="#">
+                    <img th:src="@{/images/stary/dog3.jpg}" alt=" " class="img-responsive">
+                </a>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        <!--联系方式-->
+        <div class="col-lg-4 col-md-4 col-sm-4 footer-agile1" data-aos="zoom-in">
+            <h3>联系方式</h3>
+            <p style="font-family: 'Microsoft YaHei'">电话&nbsp;&nbsp;10827233231</p>
+            <br>
+            <p>微博&nbsp;&nbsp;<a href="http://weibo.com/u/1814766985" style="font-family: 'Microsoft YaHei';color: #999">http://weibo.com/u/1814766985</a></p>
+            <br>
+            <p>论坛&nbsp;&nbsp;<a href="http://www.savingthepets.org/bbs/forum.php" style="font-family: 'Microsoft YaHei';color: #999">http://www.savingthepets.org/bbs/forum.php</a></p>
+            <br>
+            <!--<p><a th:href="@{admintoLogin}">管理员登录</a></p>-->
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    //数据表格
+    layui.use(['layer','form'], function() {
+        $("#add").click(function(){
+            layer.open({
+                type: 1,
+                title:"新增",
+                area:['50%','50%'],
+                btn: ['确定', '取消'],
+                content: $("#window"),
+                yes:function(index,layero){
+                }
+            });
+        })
+    });
+</script>
+</body>
+</html>

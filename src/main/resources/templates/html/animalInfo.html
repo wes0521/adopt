@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>动物详细信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <!--<link rel="stylesheet" th:href="@{/Xadmin/css/font.css}" href="/Xadmin/css/font.css">-->
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="/layui/css/layui.css">
+    <link rel="stylesheet" th:href="@{/Xadmin/css/xadmin.css}" href="/Xadmin/css/xadmin.css">
+    <script type="text/javascript" th:src="@{/layui/layui.js}" src="/layui/layui.js"></script>
+</head>
+
+<style>
+    .layui-row{
+        padding-left: 100px;
+    }
+    label{
+        font-size: 16px;
+    }
+    .layui-form-label{
+        /*width: 90px;*/
+        text-align: right;
+    }
+    .layui-form-label1{
+        /*width: 50%;*/
+        text-align: left;
+    }
+</style>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form method="post" class="layui-form" autocomplete="off" th:object="${animalById}">
+            <input type="hidden" name="id" id="id" th:value="*{id}">
+            <div class="layui-form-item">
+                <label  class="layui-form-label">动物名字：</label>
+                <label  class="layui-form-label1">
+                    <span th:text="*{petName}"></span>
+                </label>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别：</label>
+                <label  class="layui-form-label1">
+                    <span th:text="*{sex==1}?'雄性':'雌性'"></span>
+                </label>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">种类：</label>
+                <label class="layui-form-label1">
+                    <span th:text="*{petType}"></span>
+                </label>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生日：</label>
+                <label  class="layui-form-label1">
+                    <span th:text="${#dates.format(animalById.birthday, 'yyyy-MM-dd')}"></span>
+                </label>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">是否被领养：</label>
+                <label class="layui-form-label1">
+                    <span th:text="*{state==0}?'否':'是'"></span>
+                </label>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">描述：</label>
+                <label class="layui-form-label17">
+                    <div class="layui-input-block">
+                        <textarea th:text="*{remark}"  readonly class="layui-textarea" id="remark"></textarea>
+                    </div>
+                </label>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">照片：</label>
+                <div class="layui-input-block">
+                    <input type="hidden" id="img_url" name="pic" th:value="*{pic}"/>
+                    <div class="layui-upload-list">
+                        <img class="layui-upload-img" th:src="*{pic}" width="100px" height="80px" id="demo1"/>
+                        <p id="demoText"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <button class="layui-btn" lay-submit lay-filter="sq" th:value="*{id}" type="submit">申请</button>
+                <button type="button" onclick="window.history.back(-1);" class="layui-btn">返回</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:inline="javascript">
+    var isAdopt = [[${animalById.state}]];
+    var id = [[${animalById.id}]];
+    var realname = [[${session.user.username}]];
+    var pid = [[${session.user.pid}]];
+
+    var ctxPath = [[${#httpServletRequest.getContextPath()}]];
+
+    layui.use(['layer','form','jquery'], function() {
+            var layer=layui.layer,form = layui.form,$ = layui.jquery;
+            form.on('submit(sq)', function (data) {
+                console.log(realname+"当前用户");
+                if(pid != 0){
+                    layer.msg('您已有领养的动物',{icon: 5});
+                }
+                else if(isAdopt==1){
+                    layer.msg('此动物已被领养',{icon: 5});
+                }else{
+                    $.ajax({
+                        url: "/user/addAdopt",
+                        type: "post",
+                        data: {id:id},
+                        success: function (data1) {
+                            console.log(data1 + "===---===");
+                            if (data1 == "success") {
+                                layer.alert("申请成功", {icon: 6});
+                                setTimeout(ChangeTime, 3000);
+                                function ChangeTime() {
+                                    location.href = ctxPath+"/index";
+                                }
+                            } else {
+                                layer.msg('申请失败- ' + data1.msg, {icon: 5});
+                            }
+                        },
+                        error: function () {
+                            //请求出错处理
+                            layer.msg('申请失败+', {icon: 5});
+                        }
+                    });
+                    //location.href="/user/adoptBefore?id="+id;
+                }
+                return false;
+        });
+    });
+
+</script>
+</body>
+</html>

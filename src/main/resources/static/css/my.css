@@ -1,0 +1,28 @@
+/*myStyle-注册登录跳转文字*/
+
+#registers,#toLogin {
+    color: white;
+}
+
+#registers:hover,#toLogin:hover {
+    color: #2af598;
+}
+
+#checkCodeImg {
+    width: 95px;
+    height: 37px;
+}
+#log{
+    text-align: center;
+    margin-top: 6px;
+}
+.login{
+    height: 315px;
+}
+#reg {
+    text-align: center;
+    margin-top: 10px;
+}
+#loginll{
+    height: 265px;
+}

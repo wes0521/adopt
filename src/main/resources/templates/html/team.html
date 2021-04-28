@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>团队展示</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="keywords" content=""/>
+
+    <!-- css files -->
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" type="text/css" media="all">
+    <!-- Owl-Carousel-CSS -->
+    <link th:href="@{/css/simplelightbox.min.css}" rel="stylesheet" type="text/css">
+    <!-- Bootstrap-Core-CSS -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}" type="text/css" media="all">
+    <!-- Font-Awesome-Icons-CSS -->
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}" type="text/css" media="all" />
+    <!-- Owl-Carousel-CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all" />
+    <!--layui-->
+    <link th:href="@{/admin/assets/layui/css/layui.css}" rel="stylesheet" type="text/css" media="all"/>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <!--顶部-导航栏-->
+        <!--引入抽取的topbar-->
+        <div th:replace="html/topbar :: topbar"></div>
+        <!--个人资料-->
+        <form id="window" class="layui-form" th:action="@{/user/findPersonInfo}" th:object="${session.user}" style="margin: 5%;display: none;" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" th:value="*{username}" required  readonly lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="realname" th:value="*{realname}" required lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" th:checked="*{sex=='1'}?true:false" value="1" title="男">
+                    <input type="radio" name="sex" th:checked="*{sex=='0'}?true:false" value="0" title="女">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-block">
+                    <input type="text" name="age" th:value="*{age}" required lay-verify="required" placeholder="23" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话号码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="telephone" th:value="*{telephone}" required lay-verify="required" placeholder="15997855562" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">领养动物</label>
+                <div class="layui-input-block">`
+                    <span th:text="${session.pname}">无</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" th:value="*{email}" required lay-verify="required" placeholder="123@qq.com" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" th:value="*{address}" required lay-verify="required" placeholder="河南郑州" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+            <input type="hidden" name="id" th:value="*{id}">
+            <input type="hidden" name="navId" th:value="team">
+            <div class="layui-form-item">
+                <p style="color: red">[[${error}]]</p>
+            </div>
+        </form>
+        <!--修改密码-->
+        <form id="modifyPwd" class="layui-form" th:action="@{/user/modifyPwd}" th:object="${session.user}" style="margin: 5%;display: none;" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" th:value="*{username}" required  readonly lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-block">
+                    <input type="text" id="pwd1" name="password" required lay-verify="required|pass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-block">
+                    <input type="text" id="pwd2" name="password1" required lay-verify="required|pwd" placeholder="请确认新密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+            <input type="hidden" name="id" th:value="*{id}">
+            <input type="hidden" name="navId" th:value="team">
+            <div class="layui-form-item">
+                <p style="color: red">[[${error}]]</p>
+            </div>
+        </form>
+        <!--顶部-导航栏-->
+
+        <!-- team -->
+        <div class="team" id="team">
+            <div class="container">
+                <h3 class="agile-title" style="color: #ee3333;">四大小网红</h3>
+                <h4 style="text-align: center">这四位网红是我们救助站的公认的最可爱的、最活泼的、最聪明的。。。</h4>
+                <div class="team-agileinfo">
+                    <div class="col-md-6 team-grid w3-agileits">
+                        <div class="team-grid-right" >
+                            <img style="width: 162px;height: 158px;" th:src="${famous1.pic}"  class="img-responsive" />
+                        </div>
+                        <div class="team-grid-left">
+                            <h4 th:text="${famous1.petName}">罗罗</h4>
+                            <p th:text="${famous1.remark}">暹（xiān）罗猫是世界著名的短毛猫，也是短毛猫的代表品种。种族原产于暹罗（今泰国），故名暹罗猫。在200多年前，这种珍贵的猫仅在泰国的皇宫和大寺院中饲养，是足不出户的贵族。暹罗猫能够较好适应主人当地的气候，且性格刚烈好动，机智灵活，好奇心特强，善解人意。</p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                    <div class="col-md-6 team-grid w3-agileits">
+                        <div class="team-grid-right aliquam">
+                            <img style="width: 162px;height: 158px;" th:src="${famous2.pic}" alt=" " class="img-responsive" />
+                        </div>
+                        <div class="team-grid-left non">
+                            <h4 th:text="${famous2.petName}">Keidy</h4>
+                            <p th:text="${famous2.remark}">波斯猫是以阿富汗的土种长毛猫和土耳其的安哥拉长毛猫为基础，在英国经过100多年的选种繁殖， 于1860年诞生的一个品种。波斯猫是最常见的长毛猫，波斯猫有一张讨人喜爱的面庞， 长而华丽的背毛，优雅的举止，故有“猫中王子”、“王妃”之称，是世界上爱猫者最喜欢的纯种猫之一，占有极其重要的地位</p>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                </div>
+                <br>
+                <div class="team-agileinfo">
+                    <div class="col-md-6 team-grid w3-agileits">
+                        <div class="team-grid-right">
+                            <br>
+                            <img style="width: 162px;height: 158px;" th:src="${famous3.pic}" alt=" " class="img-responsive" />
+                        </div>
+                        <div class="team-grid-left">
+                            <h4 th:text="${famous3.petName}">小金</h4>
+                            <p th:text="${famous3.remark}">金毛寻回犬是最常见的家犬之一，它很容易养，有耐心并且对主人要求不多，只要定期运动，饲喂食物和兽医体检就可以了。它属于匀称、有力、活泼的一个犬种，特征是稳固、身体各部位配合合理，腿既不太长也不笨拙，表情友善，个性热情、机警、自信而且不怕生，性格讨人喜欢。</p>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 team-grid w3-agileits">
+                        <div class="team-grid-right aliquam">
+                            <br>
+                            <img style="width: 162px;height: 158px;" th:src="${famous4.pic}" alt=" " class="img-responsive" />
+                        </div>
+                        <div class="team-grid-left non">
+                            <h4 th:text="${famous4.petName}">富贵</h4>
+                            <p th:text="${famous4.remark}">柴犬是体型中等并且又最古老的犬。柴犬能够应付陡峭的丘陵和山脉的斜坡，拥有灵敏的感官，使得柴犬屡次成为上乘的狩猎犬。柴犬性格活泼、好动。对自己喜欢的玩具、会一天到晚的把玩。其对外有极强警惕性，能为户主看家护院。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- js 非得用2.0版本得jQuery-->
+    <script th:src="@{/js/jquery-2.2.3.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/admin/assets/layui/layui.all.js}"></script>
+    <script th:src="@{/admin/assets/layui/layui.js}"></script>
+    <script th:src="@{/admin/assets/layui/lay/modules/layer.js}"></script>
+    <!-- //js -->
+    <script type="text/javascript">
+        //个人信息弹窗
+        layui.use(['layer','form'], function(){
+            var layer = layui.layer;
+            var form = layui.form;
+            var $ = layui.$;
+            $('#info').on('click', function(){
+                //页面层
+                layer.open({
+                    type: 1 //Page层类型
+                    ,area: ["550px", "600px"]
+                    ,skin: 'layui-layer-molv'
+                    , closeBtn: 1 // 是否显示关闭按钮
+                    , anim: 0 //动画类型
+                    , icon: 1 // icon
+                    ,moveType : 0 //拖拽模式，0或者1
+                    ,title: ['个人信息','font-size:18px']
+                    // ,btn: ['提交', '取消']
+                    ,btnAlign: 'c'   // 按钮居中
+                    ,shade : 0.4 // 遮罩层透明度
+                    ,content:$('#window'),
+                });
+            });
+
+            // 密码====================================
+            //密码校验
+            form.verify({
+                pass: function (value) {
+                    if (!new RegExp("^[\\S]{6,12}$").test(value)) {
+                        return '密码必须6到12位，且不能出现空格';
+                    }
+                }
+            });
+            $('#Pwd').on('click', function(){
+                //页面层
+                layer.open({
+                    type: 1 //Page层类型
+                    ,area: ["450px", "350px"]
+                    ,skin: 'layui-layer-molv'
+                    , closeBtn: 1 // 是否显示关闭按钮
+                    , anim: 0 //动画类型
+                    , icon: 1 // icon
+                    ,moveType : 0 //拖拽模式，0或者1
+                    ,title: ['修改密码','font-size:18px']
+                    ,btnAlign: 'c'   // 按钮居中
+                    ,shade : 0.4 // 遮罩层透明度
+                    ,content:$('#modifyPwd'),
+
+                });
+            });
+
+
+            // 确认两次密码是否一致
+            form.verify({
+                pwd: function () {
+                    var psw1 = $("#pwd1").val();
+                    var psw2 = $("#pwd2").val();
+                    var message = '';
+                    if(psw1!=psw2){
+                        message="两次密码不一致";
+                    }
+                    //需要注意 需要将返回信息写在ajax方法外
+                    if (message !== '')
+                        return message;
+                }
+
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>流浪猫狗知识</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="keywords" content=""/>
+    <!-- css files -->
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" type="text/css" media="all">
+    <!-- Owl-Carousel-CSS -->
+    <link th:href="@{/css/simplelightbox.min.css}" rel="stylesheet" type="text/css">
+    <!-- Bootstrap-Core-CSS -->
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}" type="text/css" media="all">
+    <!-- Font-Awesome-Icons-CSS -->
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.css}" type="text/css" media="all" />
+    <!-- Owl-Carousel-CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all" />
+    <!--layui-->
+    <link th:href="@{/admin/assets/layui/css/layui.css}" rel="stylesheet" type="text/css" media="all"/>
+
+</head>
+<body>
+
+<div class="layui-layout layui-layout-admin">
+
+    <!--顶部-导航栏-->
+    <!--引入抽取的topbar-->
+    <div th:replace="html/topbar :: topbar"></div>
+    <!--个人资料-->
+    <form id="window" class="layui-form" th:action="@{/user/findPersonInfo}" th:object="${session.user}" style="margin: 5%;display: none;" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" th:value="*{username}" required  readonly lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="realname" th:value="*{realname}" required lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" th:checked="*{sex=='1'}?true:false" value="1" title="男">
+                <input type="radio" name="sex" th:checked="*{sex=='0'}?true:false" value="0" title="女" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年龄</label>
+            <div class="layui-input-block">
+                <input type="text" name="age" th:value="*{age}" required lay-verify="required" placeholder="23" autocomplete="off" class="layui-input">
+            </div>
+            <!--<div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话号码</label>
+            <div class="layui-input-block">
+                <input type="text" name="telephone" th:value="*{telephone}" required lay-verify="required" placeholder="15997855562" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">领养动物</label>
+            <!--<label class="layui-form-label">是否领养</label>-->
+            <div class="layui-input-block">
+                <span th:text="${session.pname}">无</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input type="text" name="email" th:value="*{email}" required lay-verify="required" placeholder="123@qq.com" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" th:value="*{address}" required lay-verify="required" placeholder="河南郑州" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+        <input type="hidden" name="id" th:value="*{id}">
+        <input type="hidden" name="navId" th:value="about">
+        <div class="layui-form-item">
+            <p style="color: red">[[${error}]]</p>
+        </div>
+    </form>
+    <!--修改密码-->
+    <form id="modifyPwd" class="layui-form" th:action="@{/user/modifyPwd}" th:object="${session.user}" style="margin: 5%;display: none;" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" th:value="*{username}" required  readonly lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-block">
+                <input type="text" id="pwd1" name="password" required lay-verify="required|pass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认密码</label>
+            <div class="layui-input-block">
+                <input type="text" id="pwd2" name="password1" required lay-verify="required|pwd" placeholder="请确认新密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+        <input type="hidden" name="id" th:value="*{id}">
+        <input type="hidden" name="navId" th:value="about">
+        <div class="layui-form-item">
+            <p style="color: red">[[${error}]]</p>
+        </div>
+    </form>
+    <!--顶部-导航栏-->
+
+    <!-- welcome -->
+    <div class="about" id="about">
+        <div class="container">
+            <h3 class="agile-title">欢迎</h3>
+            <div class="about-top w3ls-agile">
+                <div class="col-md-6 red">
+                    <img class="img-responsive" th:src="@{../images/f1.jpg}" alt="">
+                </div>
+                <div class="col-md-6 come">
+                    <div class="about-wel">
+                        <h5>几句话关于我们的
+                            <span>流浪猫狗救助</span>
+                        </h5>
+                        <p>面对这样可爱的猫和狗谁能不喜爱呢？
+                            伤心时，它们总是在我身边陪伴着我们；
+                            开心时，我们总会和它们一起分享，它们成了和我们不形影不离的好朋友。</p>
+                        <ul>
+                            <li>
+                                <i class="glyphicon glyphicon-ok"></i>猫和狗的健康和关怀</li>
+                            <li>
+                                <i class="glyphicon glyphicon-ok"></i>猫和狗的美容</li>
+                            <li>
+                                <i class="glyphicon glyphicon-ok"></i>猫和狗的食物</li>
+                            <li>
+                                <i class="glyphicon glyphicon-ok"></i>猫和狗的行为</li>
+                        </ul>
+                    </div>
+                    <div class="button-styles">
+                        <a href="#cat" data-toggle="modal" data-target="#Catbtn">养狗注意的地方</a>
+                        <a href="#dog" data-toggle="modal" data-target="#Dogbtn">养猫注意的地方</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Gallery -->
+    <div id="gallery" class="gallery">
+        <div class="container">
+            <h3 class="agile-title">以下为您展示一些流浪猫狗的图片</h3>
+        </div>
+        <div class="agileinfo-gallery-row">
+            <div class="col-md-3 col-sm-3 col-xs-4 w3gallery-grids">
+                <a th:href="@{../images/stary/cat1.jpg}" class="imghvr-hinge-right figure">
+                    <img th:src="@{../images/stary/cat1.jpg}" alt="" title="Cat Life Image" />
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 w3gallery-grids">
+                <a th:href="@{../images/stary/cat2.jpg}" class="imghvr-hinge-right figure">
+                    <img th:src="@{../images/stary/cat2.jpg}" alt="" title="Cat Life Image" />
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 w3gallery-grids">
+                <a th:href="@{../images/stary/cat3.jpg}" class="imghvr-hinge-right figure">
+                    <img th:src="@{../images/stary/cat3.jpg}" alt="" title="Cat Life Image" />
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 w3gallery-grids">
+                <a th:href="@{../images/stary/cat4.jpg}" class="imghvr-hinge-right figure">
+                    <img th:src="@{../images/stary/cat4.jpg}" alt="" title="Cat Life Image" />
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 w3gallery-grids">
+                <a th:href="@{../images/stary/dog1.jpg}" class="imghvr-hinge-right figure">
+                    <img th:src="@{../images/stary/dog1.jpg}" alt="" title="Cat Life Image" />
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 w3gallery-grids">
+                <a th:href="@{../images/stary/dog2.jpg}" class="imghvr-hinge-right figure">
+                    <img th:src="@{../images/stary/dog2.jpg}" alt="" title="Cat Life Image" />
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 w3gallery-grids">
+                <a th:href="@{../images/stary/dog3.jpg}" class="imghvr-hinge-right figure">
+                    <img th:src="@{../images/stary/dog3.jpg}" alt="" title="Cat Life Image" />
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-4 w3gallery-grids">
+                <a th:href="@{../images/stary/dog4.jpg}" class="imghvr-hinge-right figure">
+                    <img th:src="@{../images/stary/dog4.jpg}" alt="" title="Cat Life Image" />
+                </a>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <!-- Modal5 -->
+    <div class="modal fade" id="Catbtn" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="modal-info">
+                        <h4>Dog Life</h4>
+                        <img th:src="@{/images/2.jpg}" alt=" " class="img-responsive" />
+                        <p class="para-agileits-w3layouts">
+                            喂食的时间要准，尽量按照在原主人家的习惯喂养，不要喂它们过多的甜食、咸食和刺激性强的食品。
+                            刚来的宝宝，主人要亲自喂食，时日积久，便能和爱犬建立起深厚的感情，加深相互信任的程度，
+                            主人的另一个重要任务是要帮助小家伙克服离开母亲的痛苦，尽快适应新环境。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal5 -->
+    <div class="modal fade" id="Dogbtn" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="modal-info">
+                        <h4>Cat Life</h4>
+                        <img th:src="@{/images/1.jpg}" alt=" " class="img-responsive" />
+                        <p class="para-agileits-w3layouts">
+                            我们不能一直将小猫放在家里面养，我们需要时不时的将小猫带出去溜溜,然后，我们在养小猫的时候，还需要多陪小猫玩耍。
+                            我们在养小猫的时候，还需要多打理打理它的毛发。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //Gallery -->
+</div>
+<!-- js 非得用2.0版本得jQuery-->
+<script th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/assets/layui/layui.all.js}"></script>
+<script th:src="@{/admin/assets/layui/layui.js}"></script>
+<script th:src="@{/admin/assets/layui/lay/modules/layer.js}"></script>
+<!-- //js -->
+
+<!-- Banner Slider -->
+<script th:src="@{js/responsiveslides.min.js}"></script>
+<script>
+    $(function () {
+        $("#slider").responsiveSlides({
+            auto: true,
+            pager: true,
+            nav: true,
+            speed: 1000,
+            namespace: "callbacks",
+            before: function () {
+                $('.events').append("<li>before event fired.</li>");
+            },
+            after: function () {
+                $('.events').append("<li>after event fired.</li>");
+            }
+        });
+    });
+</script>
+<!-- //Banner Slider -->
+
+<!-- Sticky Navigation Script -->
+<script>
+    $(window).scroll(function () {
+        if ($(window).scrollTop() >= 795) {
+            $('nav').addClass('fixed-header');
+        } else {
+            $('nav').removeClass('fixed-header');
+        }
+    });
+
+    /* scrollTop() >= 795
+       Should be equal the the height of the header
+     */
+</script>
+<!-- //Sticky Navigation Script -->
+
+<!-- simple-lightbox -->
+<script th:src="@{js/simple-lightbox.min.js}"></script>
+<script>
+    $(function () {
+        var gallery = $('.agileinfo-gallery-row a').simpleLightbox({
+            navText: ['&lsaquo;', '&rsaquo;']
+        });
+    });
+</script>
+<link th:href="@{css/simplelightbox.min.css}" rel="stylesheet" type="text/css">
+<!-- Light-box css -->
+<!-- //simple-lightbox -->
+
+<!-- smoothscroll -->
+<script th:src="@{js/SmoothScroll.min.js}"></script>
+<!-- //smoothscroll -->
+
+<!-- start-smooth-scrolling -->
+<script th:src="@{js/move-top.js}"></script>
+<script th:src="@{js/easing.js}"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 1000);
+        });
+    });
+</script>
+<!-- //end-smooth-scrolling -->
+
+<!-- smooth-scrolling-of-move-up -->
+<script>
+    $(document).ready(function () {
+
+        $().UItoTop({
+            easingType: 'easeOutQuart'
+        });
+
+    });
+</script>
+<!-- //smooth-scrolling-of-move-up -->
+
+<!-- Owl-Carousel-JavaScript -->
+<script th:src="@{js/owl.carousel.js}"></script>
+<script>
+    $(document).ready(function () {
+        $("#owl-demo").owlCarousel({
+            items: 3,
+            lazyLoad: true,
+            autoPlay: true,
+            pagination: true,
+        });
+    });
+</script>
+<!-- //Owl-Carousel-JavaScript -->
+<script type="text/javascript">
+    //个人信息弹窗
+    layui.use(['layer','form'], function(){
+        var layer = layui.layer;
+        var form = layui.form;
+        var $ = layui.$;
+        var id = $("#id").val();
+        var realname = $("#realname").val();
+        var sex = $("#sex").val();
+        var age = $("#age").val();
+        var telephone = $("#telephone").val();
+        var state = $("#state").val();
+        var email = $("#email").val();
+        var address = $("#address").val();
+        $('#info').on('click', function(){
+            //页面层
+            layer.open({
+                type: 1 //Page层类型
+                ,area: ["550px", "600px"]
+                ,skin: 'layui-layer-molv'
+                , closeBtn: 1 // 是否显示关闭按钮
+                , anim: 0 //动画类型
+                , icon: 1 // icon
+                ,moveType : 0 //拖拽模式，0或者1
+                ,title: ['个人信息','font-size:18px']
+                // ,btn: ['提交', '取消']
+                ,btnAlign: 'c'   // 按钮居中
+                ,shade : 0.4 // 遮罩层透明度
+                ,content:$('#window'),
+                // success: function(layero, index){
+                // 	form.render();//动态渲染
+                // 	form.verify();
+                // 	form.on('submit(formDemo)', function(data){
+                // 		$.ajax({
+                // 			url:"user/findPersonInfo",
+                // 			// dataType:"json",   //返回格式为json
+                // 			async:true,
+                // 			data:{id:id,realname:realname,sex:sex,age:age,telephone:telephone,
+                // 				state:state,email:email,address:address},    //参数值
+                // 			type:"post",   //请求方式
+                // 			success:function(req){
+                // 				//请求成功时处理
+                // 				console.log(req);
+                // 				if(req == "success"){
+                // 					layer.msg('修改成功', {icon: 6});
+                // 					// layer.close(index);   // 关闭弹窗
+                // 					setTimeout(ChangeTime, 10000);
+                // 					function ChangeTime() {
+                // 						location.href = "/index";
+                // 					}
+                // 				}else{
+                // 					layer.msg('修改失败 '+req.msg, {icon: 5});
+                // 				}
+                // 			},
+                // 			error:function(){
+                // 				//请求出错处理
+                // 				// console.log("00000")
+                // 				layer.msg('修改失败', {icon: 5});
+                // 			}
+                // 		});
+                // 	});
+                // },
+                // yes: function(index, layero){
+                //
+                // 	// layero.find('.layui-btn').click();    // 这一句就是点击确认按钮触发form的隐藏提交
+                // }
+            });
+        });
+
+        // 密码====================================
+        //密码校验
+        form.verify({
+            pass: function (value) {
+                if (!new RegExp("^[\\S]{6,12}$").test(value)) {
+                    return '密码必须6到12位，且不能出现空格';
+                }
+            }
+        });
+        $('#Pwd').on('click', function(){
+            //页面层
+            layer.open({
+                type: 1 //Page层类型
+                ,area: ["450px", "350px"]
+                ,skin: 'layui-layer-molv'
+                , closeBtn: 1 // 是否显示关闭按钮
+                , anim: 0 //动画类型
+                , icon: 1 // icon
+                ,moveType : 0 //拖拽模式，0或者1
+                ,title: ['修改密码','font-size:18px']
+                ,btnAlign: 'c'   // 按钮居中
+                ,shade : 0.4 // 遮罩层透明度
+                ,content:$('#modifyPwd'),
+
+            });
+        });
+
+
+        // 确认两次密码是否一致
+        form.verify({
+            pwd: function () {
+                var psw1 = $("#pwd1").val();
+                var psw2 = $("#pwd2").val();
+                var message = '';
+                if(psw1!=psw2){
+                    message="两次密码不一致";
+                }
+                //需要注意 需要将返回信息写在ajax方法外
+                if (message !== '')
+                    return message;
+            }
+
+        });
+    });
+</script>
+
+
+</body>
+</html>

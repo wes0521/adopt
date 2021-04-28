@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Home</title>
+	<!-- Meta tag Keywords -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8" />
+	<meta name="keywords" content=""/>
+	<!--// Meta tag Keywords -->
+	<!-- css files -->
+	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" type="text/css" media="all">
+	<!-- Bootstrap-Core-CSS -->
+	<link rel="stylesheet" th:href="@{/css/font-awesome.css}" type="text/css" media="all">
+	<!-- Font-Awesome-Icons-CSS -->
+	<link rel="stylesheet" th:href="@{/css/owl.carousel.css}" type="text/css" media="all" />
+	<!-- Owl-Carousel-CSS -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all" />
+	<!--layui-->
+	<link th:href="@{/admin/assets/layui/css/layui.css}" rel="stylesheet" type="text/css" media="all"/>
+	<!-- Style-CSS -->
+	<!-- //css files -->
+	<!-- web fonts -->
+	<link href="http://fonts.googleapis.com/css?family=Molle:400i&amp;subset=latin-ext" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&amp;subset=latin-ext" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=latin-ext" rel="stylesheet">
+
+	<script th:inline="javascript">
+		var context = /*[[@{/}]]*/'';
+		var ctxPath= [[${#httpServletRequest.getContextPath()}]];
+		// var ctx = '[[@{/}]]';
+
+		function changeCode() {
+			$("#checkCodeImg").attr({"src":ctxPath+"/user/getCode?w="+Math.random()})
+		}
+	</script>
+</head>
+
+<script>
+	function userLogin() {
+		var username = $("#new_loginName").val();
+		var password = $("#new_loginPwd").val();
+		var code = $("#login_code").val();
+		$.post("/user/login?username="+username+"&password="+password+"&code="+code,function (data) {
+			if (data == "success"){
+				location.href="/index";
+			}else if(data=="error"){
+				alert("账户或密码错误，请重试!");
+				$("#new_loginName").val("");
+				$("#new_loginPwd").val("");
+				$("#login_code").val("");
+			}else if (data == "codeError") {
+				alert("验证码错误，请重新输入！");
+				$("#login_code").val("");
+			}else{
+				alert("网络问题，请稍后重试！");
+				$("#new_loginName").val("");
+				$("#new_loginPwd").val("");
+				$("#login_code").val("");
+			}
+		})
+
+	}
+</script>
+
+<body >
+
+	<div class="layui-layout layui-layout-admin">
+
+		<!--顶部topbar-->
+		<div th:replace="html/topbar :: topbar"></div>
+
+		<!-- 首页轮播图 -->
+		<div class="w3l-main" id="home1">
+			<div class="container">
+				<!-- header -->
+				<div class="header">
+					<div class="logo">
+						<h1>
+							<a th:href="@{index}">
+								<img class="logo-img center-block" th:src="@{../images/logo.png}" alt="" /> 流浪猫狗救助
+							</a>
+						</h1>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+				<!-- //header -->
+			</div>
+			<!-- Slider -->
+			<div class="slider">
+				<div class="callbacks_container">
+					<ul class="rslides" id="slider">
+						<li>
+							<div class="slider-img-w3layouts one">
+								<div class="w3l-overlay">
+									<div class="container">
+										<div class="banner-text-info">
+											<h3>我们随时
+												<span>欢迎</span> 你们来
+												<span>咨询</span>！
+											</h3>
+											<p> 全面的猫狗护理指南，让您的流浪猫狗感受到您的爱</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="slider-img-w3layouts two">
+								<div class="w3l-overlay">
+									<div class="container">
+										<div class="banner-text-info">
+											<h3>你可以展示你的
+												<span>爱</span> 向你
+												<span>的流浪猫狗</span>!</h3>
+											<p> 全面的猫狗护理指南，让您的流浪猫狗感受到您的爱</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="slider-img-w3layouts three">
+								<div class="w3l-overlay">
+									<div class="container">
+										<div class="banner-text-info">
+											<h3>猫狗 是你的
+												<span>朋友</span>！&nbsp;&nbsp;猫狗是你的
+												<span>家人</span> !</h3>
+											<p> 全面的猫狗护理指南，让您的流浪猫狗感受到您的爱</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="slider-img-w3layouts four">
+								<div class="w3l-overlay">
+									<div class="container">
+										<div class="banner-text-info">
+											<h3>猫狗如此
+												<span>可爱</span> 你们怎么可能
+												<span>不爱</span>它们!</h3>
+											<p>全面的猫狗护理指南，让您的流浪猫狗感受到您的爱</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<!--//Slider-->
+		</div>
+
+		<!--底部footer-->
+		<section th:replace="html/footer :: footer"></section>
+
+		<!--个人资料-->
+        <form id="window" class="layui-form" th:action="@{/user/findPersonInfo}" th:object="${session.user}" style="margin: 5%;display: none;" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" th:value="*{username}" required  readonly lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">姓名</label>
+				<div class="layui-input-block">
+					<input type="text" name="realname" th:value="*{realname}" required lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" th:checked="*{sex=='1'}?true:false" value="1" title="男">
+                    <input type="radio" name="sex" th:checked="*{sex=='0'}?true:false" value="0" title="女" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-block">
+                    <input type="text" name="age" th:value="*{age}" required lay-verify="required" placeholder="23" autocomplete="off" class="layui-input">
+                </div>
+                <!--<div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+            </div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">电话号码</label>
+				<div class="layui-input-block">
+					<input type="text" name="telephone" th:value="*{telephone}" required lay-verify="required" placeholder="15997855562" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">领养动物</label>
+				<!--<label class="layui-form-label">是否领养</label>-->
+				<div class="layui-input-block">
+					<span th:text="${session.pname}">无</span>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">邮箱</label>
+				<div class="layui-input-block">
+					<input type="text" name="email" th:value="*{email}" required lay-verify="required" placeholder="123@qq.com" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">地址</label>
+				<div class="layui-input-block">
+					<input type="text" name="address" th:value="*{address}" required lay-verify="required" placeholder="河南郑州" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+			<input type="hidden" name="id" th:value="*{id}">
+			<input type="hidden" name="navId" th:value="index">
+			<div class="layui-form-item">
+				<p style="color: red">[[${error}]]</p>
+			</div>
+        </form>
+
+		<!--修改密码-->
+		<form id="modifyPwd" class="layui-form" th:action="@{/user/modifyPwd}" th:object="${session.user}" style="margin: 5%;display: none;" method="post">
+			<div class="layui-form-item">
+				<label class="layui-form-label">用户名</label>
+				<div class="layui-input-block">
+					<input type="text" name="username" th:value="*{username}" required  readonly lay-verify="required" placeholder="冷潇" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">新密码</label>
+				<div class="layui-input-block">
+					<input type="text" id="pwd1" name="password" required lay-verify="required|pass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">确认密码</label>
+				<div class="layui-input-block">
+					<input type="text" id="pwd2" name="password1" required lay-verify="required|pwd" placeholder="请确认新密码" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+			<input type="hidden" name="id" th:value="*{id}">
+			<input type="hidden" name="navId" th:value="index">
+			<div class="layui-form-item">
+				<p style="color: red">[[${error}]]</p>
+			</div>
+		</form>
+	</div>
+
+<!-- js 非得用2.0版本得jQuery-->
+<script th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<!-- Necessary-JavaScript-File-For-Bootstrap -->
+<!--layui-->
+<script th:src="@{/admin/assets/layui/layui.all.js}"></script>
+<script th:src="@{/admin/assets/layui/layui.js}"></script>
+<script th:src="@{/admin/assets/layui/lay/modules/layer.js}"></script>
+<!-- //js -->
+
+<!-- Banner Slider -->
+<script th:src="@{/js/responsiveslides.min.js}"></script>
+<script>
+	$(function () {
+		$("#slider").responsiveSlides({
+			auto: true,
+			pager: true,
+			nav: true,
+			speed: 1000,
+			namespace: "callbacks",
+			before: function () {
+				$('.events').append("<li>before event fired.</li>");
+			},
+			after: function () {
+				$('.events').append("<li>after event fired.</li>");
+			}
+		});
+	});
+</script>
+<!-- //Banner Slider -->
+	<!--layui弹窗-->
+<script type="text/javascript">
+    //个人信息弹窗
+    layui.use(['layer','form'], function(){
+        var layer = layui.layer;
+		var form = layui.form;
+		var $ = layui.$;
+		var id = $("#id").val();
+		var realname = $("#realname").val();
+		var sex = $("#sex").val();
+		var age = $("#age").val();
+		var telephone = $("#telephone").val();
+		var state = $("#state").val();
+		var email = $("#email").val();
+		var address = $("#address").val();
+        $('#info').on('click', function(){
+            //页面层
+            layer.open({
+                type: 1 //Page层类型
+                ,area: ["550px", "600px"]
+				,skin: 'layui-layer-molv'
+				, closeBtn: 1 // 是否显示关闭按钮
+				, anim: 0 //动画类型
+				, icon: 1 // icon
+				,moveType : 0 //拖拽模式，0或者1
+                ,title: ['个人信息','font-size:18px']
+				// ,btn: ['提交', '取消']
+				,btnAlign: 'c'   // 按钮居中
+                ,shade : 0.4 // 遮罩层透明度
+                ,content:$('#window'),
+				// success: function(layero, index){
+				// 	form.render();//动态渲染
+				// 	form.verify();
+				// 	form.on('submit(formDemo)', function(data){
+				// 		$.ajax({
+				// 			url:"user/findPersonInfo",
+				// 			// dataType:"json",   //返回格式为json
+				// 			async:true,
+				// 			data:{id:id,realname:realname,sex:sex,age:age,telephone:telephone,
+				// 				state:state,email:email,address:address},    //参数值
+				// 			type:"post",   //请求方式
+				// 			success:function(req){
+				// 				//请求成功时处理
+				// 				console.log(req);
+				// 				if(req == "success"){
+				// 					layer.msg('修改成功', {icon: 6});
+				// 					// layer.close(index);   // 关闭弹窗
+				// 					setTimeout(ChangeTime, 10000);
+				// 					function ChangeTime() {
+				// 						location.href = "/index";
+				// 					}
+				// 				}else{
+				// 					layer.msg('修改失败 '+req.msg, {icon: 5});
+				// 				}
+				// 			},
+				// 			error:function(){
+				// 				//请求出错处理
+				// 				// console.log("00000")
+				// 				layer.msg('修改失败', {icon: 5});
+				// 			}
+				// 		});
+				// 	});
+				// },
+				// yes: function(index, layero){
+				//
+				// 	// layero.find('.layui-btn').click();    // 这一句就是点击确认按钮触发form的隐藏提交
+				// }
+            });
+        });
+
+        // 密码====================================
+		//密码校验
+		form.verify({
+			pass: function (value) {
+				if (!new RegExp("^[\\S]{6,12}$").test(value)) {
+					return '密码必须6到12位，且不能出现空格';
+				}
+			}
+		});
+		$('#Pwd').on('click', function(){
+			//页面层
+			layer.open({
+				type: 1 //Page层类型
+				,area: ["450px", "350px"]
+				,skin: 'layui-layer-molv'
+				, closeBtn: 1 // 是否显示关闭按钮
+				, anim: 0 //动画类型
+				, icon: 1 // icon
+				,moveType : 0 //拖拽模式，0或者1
+				,title: ['修改密码','font-size:18px']
+				,btnAlign: 'c'   // 按钮居中
+				,shade : 0.4 // 遮罩层透明度
+				,content:$('#modifyPwd'),
+
+			});
+		});
+
+
+		// 确认两次密码是否一致
+		form.verify({
+			pwd: function () {
+				var psw1 = $("#pwd1").val();
+				var psw2 = $("#pwd2").val();
+				var message = '';
+				if(psw1!=psw2){
+					message="两次密码不一致";
+				}
+				//需要注意 需要将返回信息写在ajax方法外
+				if (message !== '')
+					return message;
+			}
+
+		});
+    });
+</script>
+
+</body>
+</html>
