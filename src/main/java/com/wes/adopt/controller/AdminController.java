@@ -89,9 +89,11 @@ public class AdminController {
         pageModel.setPageSize(pageSize);
         System.out.println("pageSize->"+pageSize);
         IPage<Admin> adminPage = new Page<>(pageIndex, pageSize);//参数一是当前页，参数二是每页个数
+        Admin a = (Admin) session.getAttribute("admin");
         if("".equals(adminName)||null==adminName){
             QueryWrapper wrapper1 = new QueryWrapper();
             wrapper1.eq("is_deleted",0);
+            wrapper1.ne("id",a.getId()); //不查询当前管理员，以防自己删除自己
             int recordCount = adminMapper.selectCount(wrapper1);
             pageModel.setRecordCount(recordCount);
             System.out.println("空用户名recordCount->"+recordCount);
@@ -100,6 +102,7 @@ public class AdminController {
             QueryWrapper q = new QueryWrapper();
             q.like("adminName",adminName);
             q.eq("is_deleted",0);
+            q.ne("id",a.getId()); //不查询当前管理员，以防自己删除自己
             int recordCount2 = adminMapper.selectCount(q);
             pageModel.setRecordCount(recordCount2);
             System.out.println("模糊用户名recordCount->"+recordCount2);
